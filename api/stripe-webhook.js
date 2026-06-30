@@ -50,17 +50,31 @@ export default async function handler(req, res) {
     const email = session.customer_email
     const sachetCount = BUNDLE_QUANTITIES[bundle] || 1
 
-    await supabase.from('orders').insert({
+    console.log('Attempting order insert:', { name, email, sachetCount, bundle })
+
+    const { data: orderData, error: orderError } = await supabase.from('orders').insert({
       name,
       email,
       quantity: sachetCount,
       status: 'paid',
-    })
+    }).select()
 
-    const { data: stockRow } = await supabase.from('settings').select('*').eq('key', 'stock_count').single()
+    if (orderError) {
+      console.error('Order insert failed:', JSON.stringify(orderError))
+    } else {
+      console.log('Order insert succeeded:', JSON.stringify(orderData))
+    }
+
+    const { data: stockRow, error: stockFetchError } = await supabase.from('settings').select('*').eq('key', 'stock_count').single()
+    if (stockFetchError) {
+      console.error('Stock fetch failed:', JSON.stringify(stockFetchError))
+    }
     if (stockRow) {
       const newStock = Math.max(0, parseInt(stockRow.value) - sachetCount)
-      await supabase.from('settings').upsert({ key: 'stock_count', value: String(newStock) }, { onConflict: 'key' })
+      const { error: stockUpdateError } = await supabase.from('settings').upsert({ key: 'stock_count', value: String(newStock) }, { onConflict: 'key' })
+      if (stockUpdateError) {
+        console.error('Stock update failed:', JSON.stringify(stockUpdateError))
+      }
     }
 
     try {
