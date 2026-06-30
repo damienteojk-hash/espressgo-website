@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { Resend } from 'resend'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
-const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.STRIPE_SECRET_KEY ? process.env.SUPABASE_SERVICE_KEY : '')
+const supabase = createClient(process.env.VITE_SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY)
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export const config = {
@@ -66,6 +66,7 @@ export default async function handler(req, res) {
     try {
       await resend.emails.send({
         from: 'ESPRESSGO <orders@espressgo.sg>',
+        reply_to: 'damienteo@espressgo.sg',
         to: email,
         subject: 'Your ESPRESSGO order is confirmed',
         html: `
