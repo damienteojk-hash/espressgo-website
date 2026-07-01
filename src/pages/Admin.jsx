@@ -15,6 +15,7 @@ export default function Admin({ onBack }) {
   const [notifyList, setNotifyList] = useState([])
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [saveError, setSaveError] = useState(false)
   const [activeTab, setActiveTab] = useState('settings')
 
   function handleLogin(e) {
@@ -24,7 +25,10 @@ export default function Admin({ onBack }) {
   }
 
   async function loadData() {
-    const { data: settings } = await supabase.from('settings').select('*')
+    const { data: settings, error: settingsError } = await supabase.from('settings').select('*')
+    if (settingsError) {
+      console.error('Failed to load settings:', settingsError)
+    }
     if (settings) {
       const modeRow = settings.find(s => s.key === 'store_mode')
       const stockRow = settings.find(s => s.key === 'stock_count')
@@ -40,14 +44,28 @@ export default function Admin({ onBack }) {
   }
 
   async function saveSetting(key, value) {
-    await supabase.from('settings').upsert({ key, value: String(value) }, { onConflict: 'key' })
+    const { error } = await supabase.from('settings').upsert({ key, value: String(value) }, { onConflict: 'key' })
+    if (error) throw error
   }
 
   async function handleSave() {
     setSaving(true)
-    await Promise.all([saveSetting('store_mode', mode), saveSetting('stock_count', stock), saveSetting('price', price)])
-    setSaving(false); setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    setSaveError(false)
+    try {
+      await Promise.all([
+        saveSetting('store_mode', mode),
+        saveSetting('stock_count', stock),
+        saveSetting('price', price)
+      ])
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    } catch (err) {
+      console.error('Save failed:', err)
+      setSaveError(true)
+      setTimeout(() => setSaveError(false), 3000)
+    } finally {
+      setSaving(false)
+    }
   }
 
   async function markFulfilled(id) {
@@ -98,16 +116,40 @@ export default function Admin({ onBack }) {
               {mode === 'soldout' && 'Site shows sold out state with email notify form.'}
             </p>
           </div>
-          <div className={styles.settingGroup}>
-            <label className={styles.settingLabel}>Stock Count</label>
-            <input type="number" min="0" value={stock} onChange={e => setStock(parseInt(e.target.value) || 0)} className={styles.settingInput} />
-            <p className={styles.settingHint}>Shown to customers when mode is Live.</p>
-          </div>
+
+          {mode === 'live' && (
+            <div className={styles.settingGroup}>
+              <label className={styles.settingLabel}>Stock Count</label>
+              <input
+                type="number"
+                min="0"
+                value={stock}
+                onChange={e => setStock(parseInt(e.target.value) || 0)}
+                className={styles.settingInput}
+              />
+              <p className={styles.settingHint}>Number of sachets available. Automatically decrements on each order.</p>
+            </div>
+          )}
+
           <div className={styles.settingGroup}>
             <label className={styles.settingLabel}>Price (display only)</label>
-            <input type="text" placeholder="e.g. S$3.50" value={price} onChange={e => setPrice(e.target.value)} className={styles.settingInput} />
+            <input
+              type="text"
+              placeholder="e.g. S$3.50"
+              value={price}
+              onChange={e => setPrice(e.target.value)}
+              className={styles.settingInput}
+            />
+            <p className={styles.settingHint}>Shown on the product card. Does not affect Stripe pricing.</p>
           </div>
-          <button className={styles.saveBtn} onClick={handleSave} disabled={saving}>{saved ? 'Saved!' : saving ? 'Saving...' : 'Save Changes'}</button>
+
+          <button
+            className={styles.saveBtn}
+            onClick={handleSave}
+            disabled={saving}
+          >
+            {saved ? 'Saved!' : saving ? 'Saving...' : saveError ? 'Save Failed — Try Again' : 'Save Changes'}
+          </button>
         </div>
       )}
 
