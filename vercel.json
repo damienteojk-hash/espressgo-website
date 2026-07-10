@@ -1,10 +1,7 @@
 {
   "redirects": [
-    {
-      "source": "/ig",
-      "destination": "https://instagram.com/espressgo.sg",
-      "permanent": false
-    }
+    { "source": "/ig", "destination": "https://instagram.com/espressgo.sg", "permanent": false },
+    { "source": "/whatsapp", "destination": "https://wa.me/6587977961", "permanent": false }
   ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
