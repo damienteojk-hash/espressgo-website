@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    {
+      "source": "/ig",
+      "destination": "https://instagram.com/espressgo.sg",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
