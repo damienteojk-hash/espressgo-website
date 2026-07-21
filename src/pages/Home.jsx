@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { supabase } from '../supabase'
 import styles from './Home.module.css'
 
@@ -10,38 +10,12 @@ const WordmarkSVG = ({ cls }) => (
   <img src="/Asset_2.svg" alt="ESPRESSGO" className={cls || styles.heroWordmark} />
 )
 
-const BUNDLES = [
-  { id: '1-pack', label: '1 Pack', price: 2.50, qty: 1 },
-  { id: '5-pack', label: '5 Pack', price: 12.00, qty: 5 },
-  { id: '10-pack', label: '10 Pack', price: 23.00, qty: 10 },
-  { id: '20-pack', label: '20 Pack', price: 45.00, qty: 20 },
-]
+const SHOPEE_URL = 'https://shopee.sg/product/1885673461/47463818262/'
 
 export default function Home({ onAdminNav }) {
-  const [stock, setStock] = useState(null)
-  const [mode, setMode] = useState('preorder')
   const [email, setEmail] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
-
-  const [selectedBundle, setSelectedBundle] = useState(null)
-  const [buyerName, setBuyerName] = useState('')
-  const [buyerEmail, setBuyerEmail] = useState('')
-  const [buyerPhone, setBuyerPhone] = useState('')
-  const [checkoutLoading, setCheckoutLoading] = useState(false)
-  const [checkoutError, setCheckoutError] = useState('')
-
-  useEffect(() => { fetchStockInfo() }, [])
-
-  async function fetchStockInfo() {
-    const { data } = await supabase.from('settings').select('*')
-    if (data) {
-      const modeRow = data.find(s => s.key === 'store_mode')
-      const stockRow = data.find(s => s.key === 'stock_count')
-      if (modeRow) setMode(modeRow.value)
-      if (stockRow) setStock(parseInt(stockRow.value))
-    }
-  }
 
   async function handleNotify(e) {
     e.preventDefault()
@@ -52,64 +26,13 @@ export default function Home({ onAdminNav }) {
     setLoading(false)
   }
 
-  async function handleCheckout(e) {
-    e.preventDefault()
-    if (!selectedBundle || !buyerName || !buyerEmail) return
-    setCheckoutLoading(true)
-    setCheckoutError('')
-    try {
-      const res = await fetch('/api/create-checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          bundle: selectedBundle,
-          name: buyerName,
-          email: buyerEmail,
-          phone: buyerPhone,
-        }),
-      })
-      const data = await res.json()
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        setCheckoutError('Something went wrong. Please try again.')
-      }
-    } catch (err) {
-      setCheckoutError('Something went wrong. Please try again.')
-    }
-    setCheckoutLoading(false)
-  }
-
-  const soldOut = mode === 'soldout' || (mode === 'live' && stock <= 0)
-
-  const StoreStatusBadge = () => {
-    if (mode === 'preorder') return <span className={styles.badge}>Pre-order Open</span>
-    if (mode === 'live' && stock > 0) return <span className={styles.badge}>{stock} sachets left</span>
-    return <span className={styles.badgeSoldOut}>Sold Out</span>
-  }
-
   const HeroCTA = () => (
     <div className={styles.ctaBlock}>
-      <StoreStatusBadge />
-      {!soldOut ? (
-        <>
-          <p className={styles.ctaNote}>
-            {mode === 'preorder' ? 'First batch dropping soon. Reserve yours now.' : 'Pick your bundle below.'}
-          </p>
-          <a href="#order" className={styles.ctaBtn}>
-            {mode === 'preorder' ? 'Pre-order Now' : 'Order Now'}
-          </a>
-        </>
-      ) : (
-        submitted ? (
-          <p className={styles.ctaNote}>You're on the list. We'll notify you.</p>
-        ) : (
-          <form onSubmit={handleNotify} className={styles.notifyForm}>
-            <input type="email" placeholder="your@email.com" value={email} onChange={e => setEmail(e.target.value)} className={styles.notifyInput} required />
-            <button type="submit" className={styles.notifyBtn} disabled={loading}>{loading ? '...' : 'Notify Me'}</button>
-          </form>
-        )
-      )}
+      <span className={styles.badge}>Available Now on Shopee</span>
+      <p className={styles.ctaNoteDark}>Grab your sachets, delivered straight to your door.</p>
+      <a href={SHOPEE_URL} target="_blank" rel="noopener noreferrer" className={styles.ctaBtn}>
+        Buy on Shopee
+      </a>
     </div>
   )
 
@@ -191,53 +114,20 @@ export default function Home({ onAdminNav }) {
         <div className={styles.sectionInner}>
           <p className={styles.sectionLabel}>Get Yours</p>
           <h2 className={styles.sectionTitle}>Order ESPRESSGO</h2>
-          <p className={styles.pickupNote}>Pickup at Nanyang Polytechnic, Blk E North Canteen, N2 No Nonsense Stall</p>
+          <div className={styles.soldOutBlock}>
+            <a href={SHOPEE_URL} target="_blank" rel="noopener noreferrer" className={styles.ctaBtnDark}>
+              Buy on Shopee
+            </a>
 
-          {soldOut ? (
-            <div className={styles.soldOutBlock}>
-              <span className={styles.badgeSoldOut}>Sold Out</span>
-              {submitted ? (
-                <p className={styles.ctaNote}>You're on the list. We'll notify you.</p>
-              ) : (
-                <form onSubmit={handleNotify} className={styles.notifyForm}>
-                  <input type="email" placeholder="your@email.com" value={email} onChange={e => setEmail(e.target.value)} className={styles.notifyInput} required />
-                  <button type="submit" className={styles.notifyBtn} disabled={loading}>{loading ? '...' : 'Notify Me'}</button>
-                </form>
-              )}
-            </div>
-          ) : (
-            <>
-              <div className={styles.bundleGrid}>
-                {BUNDLES.map(b => (
-                  <button
-                    key={b.id}
-                    className={`${styles.bundleCard} ${selectedBundle === b.id ? styles.bundleCardActive : ''}`}
-                    onClick={() => setSelectedBundle(b.id)}
-                    type="button"
-                  >
-                    <span className={styles.bundleLabel}>{b.label}</span>
-                    <span className={styles.bundlePrice}>S${b.price.toFixed(2)}</span>
-                    <span className={styles.bundleQty}>{b.qty} sachet{b.qty > 1 ? 's' : ''}</span>
-                  </button>
-                ))}
-              </div>
-
-              {selectedBundle && (
-                <form onSubmit={handleCheckout} className={styles.checkoutForm}>
-                  <p className={styles.checkoutFormTitle}>Your Details</p>
-                  <div className={styles.checkoutFormGrid}>
-                    <input type="text" placeholder="Full name" value={buyerName} onChange={e => setBuyerName(e.target.value)} className={styles.checkoutInput} required />
-                    <input type="email" placeholder="Email" value={buyerEmail} onChange={e => setBuyerEmail(e.target.value)} className={styles.checkoutInput} required />
-                    <input type="tel" placeholder="Phone (optional)" value={buyerPhone} onChange={e => setBuyerPhone(e.target.value)} className={styles.checkoutInput} />
-                  </div>
-                  {checkoutError && <p className={styles.checkoutError}>{checkoutError}</p>}
-                  <button type="submit" className={styles.ctaBtn} disabled={checkoutLoading}>
-                    {checkoutLoading ? 'Redirecting to payment...' : 'Proceed to Payment'}
-                  </button>
-                </form>
-              )}
-            </>
-          )}
+            {submitted ? (
+              <p className={styles.ctaNote}>You're on the list. We'll keep you posted.</p>
+            ) : (
+              <form onSubmit={handleNotify} className={styles.notifyForm}>
+                <input type="email" placeholder="your@email.com" value={email} onChange={e => setEmail(e.target.value)} className={styles.notifyInputDark} required />
+                <button type="submit" className={styles.notifyBtnDark} disabled={loading}>{loading ? '...' : 'Get Updates'}</button>
+              </form>
+            )}
+          </div>
         </div>
       </section>
 

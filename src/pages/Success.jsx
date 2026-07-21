@@ -22,12 +22,9 @@ function Success({ onBackHome }) {
     }}>
       <img src="/Asset_2.svg" alt="ESPRESSGO" style={{ width: '200px', marginBottom: '1.5rem' }} />
       <h1 style={{ fontSize: '2rem', marginBottom: '1rem' }}>Order Confirmed</h1>
-      <p style={{ fontSize: '1.1rem', maxWidth: '480px', marginBottom: '0.5rem' }}>
-        Thank you for your order. A confirmation email is on its way with your order details and pickup instructions.
-      </p>
-      <p style={{ fontSize: '1rem', opacity: 0.85, marginBottom: '2rem' }}>
-        Pickup at Nanyang Polytechnic, Blk E North Canteen, N2 No Nonsense Stall.
-      </p>
+     <p style={{ fontSize: '1.1rem', maxWidth: '480px', marginBottom: '0.5rem' }}>
+  Thank you for your order. A confirmation email is on its way with your order details.
+</p>
       {sessionId && (
         <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>
           Reference: {sessionId.slice(0, 24)}...
