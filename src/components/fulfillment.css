@@ -1,0 +1,141 @@
+/* Minimal starter styles — adjust colors/spacing to match your existing
+   espressgo.sg design tokens. Structure only, no opinionated branding. */
+
+.fulfillment-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.fulfillment-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 14px 16px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.fulfillment-option.is-selected {
+  border-color: #111;
+  box-shadow: 0 0 0 1px #111;
+}
+
+.option-title {
+  font-weight: 600;
+}
+
+.option-subtitle {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.option-hint {
+  font-size: 0.78rem;
+  color: #b45309;
+  margin-top: 2px;
+}
+
+.bundle-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.bundle-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 6px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.bundle-option.is-selected {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+.bundle-price {
+  font-size: 0.78rem;
+  opacity: 0.75;
+}
+
+.contact-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.contact-fields input {
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.pickup-panel,
+.delivery-panel {
+  margin-top: 12px;
+}
+
+.pickup-instructions {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+.pickup-slot-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.pickup-slot {
+  padding: 10px 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.pickup-slot.is-selected {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+.pickup-confirm-btn,
+.delivery-confirm-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #111;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.pickup-confirm-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.delivery-note {
+  font-size: 0.85rem;
+  color: #666;
+}

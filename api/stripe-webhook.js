@@ -28,6 +28,12 @@ const BUNDLE_QUANTITIES = {
   '20-pack': 20,
 }
 
+function formatPickupDate(isoDate) {
+  if (!isoDate) return null
+  const d = new Date(isoDate + 'T00:00:00')
+  return d.toLocaleDateString('en-SG', { weekday: 'long', day: 'numeric', month: 'long' })
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).end()
@@ -46,17 +52,21 @@ export default async function handler(req, res) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
-    const { bundle, name, phone } = session.metadata
+    const { bundle, name, phone, pickupDate, pickupLocation } = session.metadata
     const email = session.customer_email
     const sachetCount = BUNDLE_QUANTITIES[bundle] || 1
+    const location = pickupLocation || 'NYP MakersNode Marketplace'
+    const formattedDate = formatPickupDate(pickupDate)
 
-    console.log('Attempting order insert:', { name, email, sachetCount, bundle })
+    console.log('Attempting order insert:', { name, email, sachetCount, bundle, pickupDate })
 
     const { data: orderData, error: orderError } = await supabase.from('orders').insert({
       name,
       email,
       quantity: sachetCount,
       status: 'paid',
+      pickup_date: pickupDate || null,
+      pickup_location: location,
     }).select()
 
     if (orderError) {
@@ -89,7 +99,8 @@ export default async function handler(req, res) {
             <p>Hi ${name},</p>
             <p>Thanks for your order. Here are the details:</p>
             <p><strong>${bundle.replace('-', ' ')}</strong></p>
-            <p>Pickup location: <strong>Nanyang Polytechnic, Blk E North Canteen, N2 No Nonsense Stall</strong></p>
+            <p>Pickup location: <strong>${location}</strong></p>
+            ${formattedDate ? `<p>Pickup date: <strong>${formattedDate}</strong></p>` : ''}
             <p>We'll notify you once your order is ready for collection.</p>
             <p>Thanks for supporting ESPRESSGO!</p>
           </div>

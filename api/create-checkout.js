@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { bundle, name, email, phone } = req.body
+    const { bundle, name, email, phone, pickupDate } = req.body
 
     const product = PRICES[bundle]
     if (!product) {
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
             currency: 'sgd',
             product_data: {
               name: product.name,
-              description: 'ESPRESSGO Espresso Coffee Jelly - Pickup at NYP North Canteen',
+              description: 'ESPRESSGO Espresso Coffee Jelly - Pickup at NYP MakersNode Marketplace',
             },
             unit_amount: product.amount,
           },
@@ -45,6 +45,8 @@ export default async function handler(req, res) {
         bundle,
         name,
         phone,
+        pickupDate,
+        pickupLocation: 'NYP MakersNode Marketplace',
       },
     })
 

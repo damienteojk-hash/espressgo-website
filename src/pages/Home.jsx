@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { supabase } from '../supabase'
 import styles from './Home.module.css'
+import FulfillmentSelector from '../components/FulfillmentSelector'
+import '../components/fulfillment.css'
 
 const CharacterSVG = ({ cls }) => (
   <img src="/Asset_1.svg" alt="" className={cls || styles.character} />
@@ -24,6 +26,22 @@ export default function Home({ onAdminNav }) {
     await supabase.from('notify_list').insert({ email })
     setSubmitted(true)
     setLoading(false)
+  }
+
+  // Called when the buyer fills the pickup form and hits "Continue to payment".
+  // Sends the data straight to your real /api/create-checkout endpoint.
+  async function handlePickupCheckout({ bundle, pickupDate, name, email, phone }) {
+    const res = await fetch('/api/create-checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bundle, pickupDate, name, email, phone }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+      alert(data.error || 'Something went wrong, please try again.')
+      return
+    }
+    window.location.href = data.url
   }
 
   const HeroCTA = () => (
@@ -115,9 +133,7 @@ export default function Home({ onAdminNav }) {
           <p className={styles.sectionLabel}>Get Yours</p>
           <h2 className={styles.sectionTitle}>Order ESPRESSGO</h2>
           <div className={styles.soldOutBlock}>
-            <a href={SHOPEE_URL} target="_blank" rel="noopener noreferrer" className={styles.ctaBtnDark}>
-              Buy on Shopee
-            </a>
+            <FulfillmentSelector onPickupCheckout={handlePickupCheckout} />
 
             {submitted ? (
               <p className={styles.ctaNote}>You're on the list. We'll keep you posted.</p>
