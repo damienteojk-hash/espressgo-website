@@ -47,10 +47,19 @@ export default function Home({ onAdminNav }) {
   const HeroCTA = () => (
     <div className={styles.ctaBlock}>
       <span className={styles.badge}>Available Now on Shopee</span>
-      <p className={styles.ctaNoteDark}>Grab your sachets, delivered straight to your door.</p>
-      <a href={SHOPEE_URL} target="_blank" rel="noopener noreferrer" className={styles.ctaBtn}>
-        Buy on Shopee
-      </a>
+      <p className={styles.ctaNoteDark}>Grab your sachets, delivered straight to your door — or pick up free nearby.</p>
+      <div className="hero-cta-row">
+        <a href={SHOPEE_URL} target="_blank" rel="noopener noreferrer" className={styles.ctaBtn}>
+          Buy on Shopee
+        </a>
+        <button
+          type="button"
+          className="hero-pickup-btn"
+          onClick={() => document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' })}
+        >
+          Order for Pickup
+        </button>
+      </div>
     </div>
   )
 

@@ -91,6 +91,22 @@
   margin: -2px 0 0 2px;
 }
 
+.hero-cta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.hero-pickup-btn {
+  padding: 12px 20px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .pickup-panel,
 .delivery-panel {
   margin-top: 12px;
