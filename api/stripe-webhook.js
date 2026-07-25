@@ -37,6 +37,21 @@ function formatPickupDate(isoDate) {
   return d.toLocaleDateString('en-SG', { weekday: 'long', day: 'numeric', month: 'long' })
 }
 
+function buildWhatsAppLink(phone, { name, bundle, formattedDate, location }) {
+  if (!phone) return null
+  // Strip anything that isn't a digit (spaces, dashes, +, brackets)
+  const digitsOnly = phone.replace(/\D/g, '')
+  // Singapore numbers are 8 digits; prepend the 65 country code if not already present
+  const withCountryCode = digitsOnly.startsWith('65') ? digitsOnly : `65${digitsOnly}`
+
+  const firstName = (name || '').split(' ')[0] || 'there'
+  const bundleLabel = BUNDLE_LABELS[bundle] || bundle
+  const dateLine = formattedDate ? ` on ${formattedDate}` : ''
+  const message = `Hi ${firstName}, this is Damien, founder of ESPRESSGO! Thank you so much for your order (${bundleLabel}). Just a reminder that your pickup is at ${location}${dateLine}. Let me know if you have any questions!`
+
+  return `https://wa.me/${withCountryCode}?text=${encodeURIComponent(message)}`
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).end()
@@ -60,6 +75,7 @@ export default async function handler(req, res) {
     const sachetCount = BUNDLE_QUANTITIES[bundle] || 1
     const location = pickupLocation || 'NYP MakersNode Marketplace'
     const formattedDate = formatPickupDate(pickupDate)
+    const whatsappLink = buildWhatsAppLink(phone, { name, bundle, formattedDate, location })
 
     console.log('Attempting order insert:', { name, email, sachetCount, bundle, pickupDate })
 
@@ -125,6 +141,7 @@ export default async function handler(req, res) {
             <p><strong>Customer:</strong> ${name}</p>
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Phone:</strong> ${phone}</p>
+            ${whatsappLink ? `<p><a href="${whatsappLink}" style="display:inline-block; background:#25D366; color:#fff; padding:8px 16px; border-radius:6px; text-decoration:none; font-weight:600;">Message ${name} on WhatsApp</a></p>` : ''}
             <p><strong>Pickup date:</strong> ${formattedDate || pickupDate || 'Not specified'}</p>
             <p><strong>Pickup location:</strong> ${location}</p>
             <p><strong>Stripe session:</strong> ${session.id}</p>
