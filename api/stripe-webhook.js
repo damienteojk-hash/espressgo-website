@@ -110,7 +110,52 @@ export default async function handler(req, res) {
         `,
       })
     } catch (emailErr) {
-      console.error('Email failed:', emailErr)
+      console.error('Customer email failed:', emailErr)
+    }
+
+    try {
+      await resend.emails.send({
+        from: 'ESPRESSGO Orders <orders@espressgo.sg>',
+        to: ['damienteo@espressgo.sg', 'espressgosg@gmail.com'],
+        subject: `New pickup order — ${BUNDLE_LABELS[bundle] || bundle} (${formattedDate || pickupDate || 'no date'})`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2 style="color: #653a17;">New Pickup Order</h2>
+            <p><strong>Bundle:</strong> ${BUNDLE_LABELS[bundle] || bundle} (${sachetCount} sachets)</p>
+            <p><strong>Customer:</strong> ${name}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Phone:</strong> ${phone}</p>
+            <p><strong>Pickup date:</strong> ${formattedDate || pickupDate || 'Not specified'}</p>
+            <p><strong>Pickup location:</strong> ${location}</p>
+            <p><strong>Stripe session:</strong> ${session.id}</p>
+          </div>
+        `,
+      })
+    } catch (emailErr) {
+      console.error('Owner notification email failed:', emailErr)
+    }
+
+    // Notify the owner so a new order is never missed.
+    try {
+      await resend.emails.send({
+        from: 'ESPRESSGO Orders <orders@espressgo.sg>',
+        to: process.env.ORDER_NOTIFY_EMAIL || 'damienteo@espressgo.sg',
+        subject: `New pickup order — ${BUNDLE_LABELS[bundle] || bundle}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
+            <h2 style="color: #653a17;">New Order Received</h2>
+            <p><strong>${BUNDLE_LABELS[bundle] || bundle}</strong> (${sachetCount} sachets)</p>
+            <p>Buyer: <strong>${name}</strong></p>
+            <p>Email: ${email}</p>
+            <p>Phone: <strong>${phone}</strong></p>
+            <p>Pickup location: ${location}</p>
+            ${formattedDate ? `<p>Pickup date: <strong>${formattedDate}</strong></p>` : ''}
+            <p style="color:#888; font-size: 0.85em;">Remember to WhatsApp ${phone} with any order updates.</p>
+          </div>
+        `,
+      })
+    } catch (notifyErr) {
+      console.error('Owner notification email failed:', notifyErr)
     }
   }
 
