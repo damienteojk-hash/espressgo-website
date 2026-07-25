@@ -100,11 +100,21 @@
 
 .hero-pickup-btn {
   padding: 12px 20px;
-  border: 1px solid currentColor;
+  border: 1.5px solid #f0e4cc;
   border-radius: 8px;
   background: transparent;
-  font-weight: 600;
+  color: #f0e4cc;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
   cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.hero-pickup-btn:hover {
+  background: #f0e4cc;
+  color: #4a2c14;
 }
 
 .pickup-panel,
