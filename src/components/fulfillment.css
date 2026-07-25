@@ -85,6 +85,12 @@
   font-size: 0.9rem;
 }
 
+.phone-note {
+  font-size: 0.75rem;
+  color: #888;
+  margin: -2px 0 0 2px;
+}
+
 .pickup-panel,
 .delivery-panel {
   margin-top: 12px;

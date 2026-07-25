@@ -4,15 +4,13 @@ import PickupDatePicker from "./PickupDatePicker";
 const SHOPEE_URL = "https://shopee.sg/product/1885673461/47463818262/";
 
 const BUNDLES = [
-  { id: "1-pack", label: "1 Pack", price: "$2.50" },
-  { id: "5-pack", label: "5 Pack", price: "$12.00" },
-  { id: "10-pack", label: "10 Pack", price: "$23.00" },
-  { id: "20-pack", label: "20 Pack", price: "$45.00" },
+  { id: "pack-5", label: "Pack of 5", price: "$13.90" },
+  { id: "box-12", label: "Box of 12", price: "$31.20" },
 ];
 
 export default function FulfillmentSelector({ onPickupCheckout }) {
   const [mode, setMode] = useState(null); // null | 'pickup' | 'delivery'
-  const [bundle, setBundle] = useState("5-pack");
+  const [bundle, setBundle] = useState("pack-5");
   const [pickupDate, setPickupDate] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -23,7 +21,7 @@ export default function FulfillmentSelector({ onPickupCheckout }) {
     window.location.href = SHOPEE_URL;
   };
 
-  const canSubmit = pickupDate && name && email && !submitting;
+  const canSubmit = pickupDate && name && email && phone && !submitting;
 
   const handlePickupSubmit = async (e) => {
     e.preventDefault();
@@ -99,10 +97,12 @@ export default function FulfillmentSelector({ onPickupCheckout }) {
             />
             <input
               type="tel"
-              placeholder="Phone (optional)"
+              placeholder="Phone number"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              required
             />
+            <p className="phone-note">We'll WhatsApp you order updates on this number.</p>
           </div>
 
           <button type="submit" className="pickup-confirm-btn" disabled={!canSubmit}>

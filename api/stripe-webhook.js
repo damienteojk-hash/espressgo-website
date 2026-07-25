@@ -22,10 +22,13 @@ function buffer(req) {
 }
 
 const BUNDLE_QUANTITIES = {
-  '1-pack': 1,
-  '5-pack': 5,
-  '10-pack': 10,
-  '20-pack': 20,
+  'pack-5': 5,
+  'box-12': 12,
+}
+
+const BUNDLE_LABELS = {
+  'pack-5': 'Pack of 5',
+  'box-12': 'Box of 12',
 }
 
 function formatPickupDate(isoDate) {
@@ -98,7 +101,7 @@ export default async function handler(req, res) {
             <h2 style="color: #653a17;">Order Confirmed!</h2>
             <p>Hi ${name},</p>
             <p>Thanks for your order. Here are the details:</p>
-            <p><strong>${bundle.replace('-', ' ')}</strong></p>
+            <p><strong>${BUNDLE_LABELS[bundle] || bundle}</strong></p>
             <p>Pickup location: <strong>${location}</strong></p>
             ${formattedDate ? `<p>Pickup date: <strong>${formattedDate}</strong></p>` : ''}
             <p>We'll notify you once your order is ready for collection.</p>
