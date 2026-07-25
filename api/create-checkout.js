@@ -3,10 +3,8 @@ import Stripe from 'stripe'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 const PRICES = {
-  '1-pack': { amount: 250, name: '1 Pack ESPRESSGO' },
-  '5-pack': { amount: 1200, name: '5 Pack ESPRESSGO' },
-  '10-pack': { amount: 2300, name: '10 Pack ESPRESSGO' },
-  '20-pack': { amount: 4500, name: '20 Pack ESPRESSGO' },
+  'pack-5': { amount: 1390, name: 'Pack of 5' },
+  'box-12': { amount: 3120, name: 'Box of 12' },
 }
 
 export default async function handler(req, res) {
@@ -20,6 +18,9 @@ export default async function handler(req, res) {
     const product = PRICES[bundle]
     if (!product) {
       return res.status(400).json({ error: 'Invalid bundle' })
+    }
+    if (!phone) {
+      return res.status(400).json({ error: 'Phone number is required' })
     }
 
     const session = await stripe.checkout.sessions.create({
