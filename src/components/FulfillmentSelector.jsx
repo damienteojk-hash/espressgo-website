@@ -4,8 +4,9 @@ import PickupDatePicker from "./PickupDatePicker";
 const SHOPEE_URL = "https://shopee.sg/product/1885673461/47463818262/";
 
 const BUNDLES = [
-  { id: "pack-5", label: "Pack of 5", price: "$13.90" },
-  { id: "box-12", label: "Box of 12", price: "$31.20" },
+  { id: "single", label: "Single Sachet", price: "$3.90" },
+  { id: "pack-5", label: "Pack of 5", price: "$18.90" },
+  { id: "box-12", label: "Box of 12", price: "$44.90" },
 ];
 
 export default function FulfillmentSelector({ onPickupCheckout }) {

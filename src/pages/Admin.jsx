@@ -2,15 +2,24 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../supabase'
 import styles from './Admin.module.css'
 
-const ADMIN_PASSWORD = 'espressgo2026'
+const ADMIN_PASSWORD = 'Espressgo2026.'
+
+const BUNDLE_LABELS = {
+  1: 'Single Sachet',
+  5: 'Pack of 5',
+  12: 'Box of 12',
+}
+
+function bundleLabelForQuantity(qty) {
+  return BUNDLE_LABELS[qty] || `${qty} sachets`
+}
 
 export default function Admin({ onBack }) {
   const [authed, setAuthed] = useState(false)
   const [pw, setPw] = useState('')
   const [pwError, setPwError] = useState(false)
-  const [mode, setMode] = useState('preorder')
+  const [mode, setMode] = useState('instock')
   const [stock, setStock] = useState(0)
-  const [price, setPrice] = useState('')
   const [orders, setOrders] = useState([])
   const [notifyList, setNotifyList] = useState([])
   const [saving, setSaving] = useState(false)
@@ -32,10 +41,8 @@ export default function Admin({ onBack }) {
     if (settings) {
       const modeRow = settings.find(s => s.key === 'store_mode')
       const stockRow = settings.find(s => s.key === 'stock_count')
-      const priceRow = settings.find(s => s.key === 'price')
       if (modeRow) setMode(modeRow.value)
       if (stockRow) setStock(parseInt(stockRow.value) || 0)
-      if (priceRow) setPrice(priceRow.value)
     }
     const { data: orderData } = await supabase.from('orders').select('*').order('created_at', { ascending: false }).limit(50)
     if (orderData) setOrders(orderData)
@@ -55,7 +62,6 @@ export default function Admin({ onBack }) {
       await Promise.all([
         saveSetting('store_mode', mode),
         saveSetting('stock_count', stock),
-        saveSetting('price', price)
       ])
       setSaved(true)
       setTimeout(() => setSaved(false), 2000)
@@ -106,18 +112,17 @@ export default function Admin({ onBack }) {
           <div className={styles.settingGroup}>
             <label className={styles.settingLabel}>Store Mode</label>
             <div className={styles.modeToggle}>
-              {[['preorder','Pre-order'],['live','Live / In Stock'],['soldout','Sold Out']].map(([val, label]) => (
+              {[['instock', 'In Stock'], ['outofstock', 'Out of Stock']].map(([val, label]) => (
                 <button key={val} className={`${styles.modeBtn} ${mode === val ? styles.modeBtnActive : ''}`} onClick={() => setMode(val)}>{label}</button>
               ))}
             </div>
             <p className={styles.settingHint}>
-              {mode === 'preorder' && 'Site shows a pre-order CTA.'}
-              {mode === 'live' && 'Site shows live stock count and order button.'}
-              {mode === 'soldout' && 'Site shows sold out state with email notify form.'}
+              {mode === 'instock' && 'Site shows live stock count and the order buttons.'}
+              {mode === 'outofstock' && 'Site shows an out-of-stock state instead of the order buttons.'}
             </p>
           </div>
 
-          {mode === 'live' && (
+          {mode === 'instock' && (
             <div className={styles.settingGroup}>
               <label className={styles.settingLabel}>Stock Count</label>
               <input
@@ -130,18 +135,6 @@ export default function Admin({ onBack }) {
               <p className={styles.settingHint}>Number of sachets available. Automatically decrements on each order.</p>
             </div>
           )}
-
-          <div className={styles.settingGroup}>
-            <label className={styles.settingLabel}>Price (display only)</label>
-            <input
-              type="text"
-              placeholder="e.g. S$3.50"
-              value={price}
-              onChange={e => setPrice(e.target.value)}
-              className={styles.settingInput}
-            />
-            <p className={styles.settingHint}>Shown on the product card. Does not affect Stripe pricing.</p>
-          </div>
 
           <button
             className={styles.saveBtn}
@@ -157,12 +150,16 @@ export default function Admin({ onBack }) {
         <div className={styles.panel}>
           {orders.length === 0 ? <p className={styles.emptyState}>No orders yet.</p> : (
             <table className={styles.table}>
-              <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Qty</th><th>Status</th><th>Action</th></tr></thead>
+              <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Bundle</th><th>Pickup Date</th><th>Status</th><th>Action</th></tr></thead>
               <tbody>
                 {orders.map(o => (
                   <tr key={o.id}>
                     <td>{new Date(o.created_at).toLocaleDateString('en-SG')}</td>
-                    <td>{o.name || '-'}</td><td>{o.email || '-'}</td><td>{o.quantity || 1}</td>
+                    <td>{o.name || '-'}</td>
+                    <td>{o.email || '-'}</td>
+                    <td>{o.phone || '-'}</td>
+                    <td>{bundleLabelForQuantity(o.quantity || 1)}</td>
+                    <td>{o.pickup_date ? new Date(o.pickup_date + 'T00:00:00').toLocaleDateString('en-SG', { weekday: 'short', day: 'numeric', month: 'short' }) : '-'}</td>
                     <td><span className={`${styles.statusBadge} ${o.status === 'fulfilled' ? styles.statusFulfilled : styles.statusPending}`}>{o.status || 'pending'}</span></td>
                     <td>{o.status !== 'fulfilled' && <button className={styles.fulfillBtn} onClick={() => markFulfilled(o.id)}>Mark Fulfilled</button>}</td>
                   </tr>

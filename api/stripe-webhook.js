@@ -22,11 +22,13 @@ function buffer(req) {
 }
 
 const BUNDLE_QUANTITIES = {
+  'single': 1,
   'pack-5': 5,
   'box-12': 12,
 }
 
 const BUNDLE_LABELS = {
+  'single': 'Single Sachet',
   'pack-5': 'Pack of 5',
   'box-12': 'Box of 12',
 }
@@ -82,6 +84,7 @@ export default async function handler(req, res) {
     const { data: orderData, error: orderError } = await supabase.from('orders').insert({
       name,
       email,
+      phone,
       quantity: sachetCount,
       status: 'paid',
       pickup_date: pickupDate || null,

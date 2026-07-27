@@ -3,8 +3,9 @@ import Stripe from 'stripe'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 const PRICES = {
-  'pack-5': { amount: 1390, name: 'Pack of 5' },
-  'box-12': { amount: 3120, name: 'Box of 12' },
+  'single': { amount: 390, name: 'Single Sachet' },
+  'pack-5': { amount: 1890, name: 'Pack of 5' },
+  'box-12': { amount: 4490, name: 'Box of 12' },
 }
 
 export default async function handler(req, res) {
