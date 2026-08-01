@@ -14,6 +14,13 @@ function bundleLabelForQuantity(qty) {
   return BUNDLE_LABELS[qty] || `${qty} sachets`
 }
 
+function itemsSummaryForOrder(order) {
+  if (Array.isArray(order.items) && order.items.length > 0) {
+    return order.items.map(i => `${i.label} x${i.qty}`).join(', ')
+  }
+  return bundleLabelForQuantity(order.quantity || 1)
+}
+
 export default function Admin({ onBack }) {
   const [authed, setAuthed] = useState(false)
   const [pw, setPw] = useState('')
@@ -158,7 +165,7 @@ export default function Admin({ onBack }) {
                     <td>{o.name || '-'}</td>
                     <td>{o.email || '-'}</td>
                     <td>{o.phone || '-'}</td>
-                    <td>{bundleLabelForQuantity(o.quantity || 1)}</td>
+                    <td>{itemsSummaryForOrder(o)}</td>
                     <td>{o.pickup_date ? new Date(o.pickup_date + 'T00:00:00').toLocaleDateString('en-SG', { weekday: 'short', day: 'numeric', month: 'short' }) : '-'}</td>
                     <td><span className={`${styles.statusBadge} ${o.status === 'fulfilled' ? styles.statusFulfilled : styles.statusPending}`}>{o.status || 'pending'}</span></td>
                     <td>{o.status !== 'fulfilled' && <button className={styles.fulfillBtn} onClick={() => markFulfilled(o.id)}>Mark Fulfilled</button>}</td>

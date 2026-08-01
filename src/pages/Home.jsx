@@ -30,11 +30,11 @@ export default function Home({ onAdminNav }) {
 
   // Called when the buyer fills the pickup form and hits "Continue to payment".
   // Sends the data straight to your real /api/create-checkout endpoint.
-  async function handlePickupCheckout({ bundle, pickupDate, name, email, phone }) {
+  async function handlePickupCheckout({ cart, pickupDate, name, email, phone }) {
     const res = await fetch('/api/create-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ bundle, pickupDate, name, email, phone }),
+      body: JSON.stringify({ cart, pickupDate, name, email, phone }),
     })
     const data = await res.json()
     if (!res.ok) {
@@ -71,6 +71,7 @@ export default function Home({ onAdminNav }) {
           <a href="#product">Product</a>
           <a href="#about">About</a>
           <a href="#order">Order</a>
+          <a href="/ig" target="_blank" rel="noopener noreferrer">Instagram</a>
         </div>
       </nav>
 
@@ -159,7 +160,10 @@ export default function Home({ onAdminNav }) {
       <footer className={styles.footer}>
         <WordmarkSVG cls={styles.footerWordmark} />
         <p className={styles.footerText}>ESPRESSGO Pte. Ltd. · Singapore</p>
-        <button className={styles.adminLink} onClick={onAdminNav}>Admin</button>
+        <div className={styles.footerLinks}>
+          <a href="/ig" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>Instagram</a>
+          <button className={styles.adminLink} onClick={onAdminNav}>Admin</button>
+        </div>
       </footer>
     </div>
   )

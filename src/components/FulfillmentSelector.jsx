@@ -1,17 +1,20 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import PickupDatePicker from "./PickupDatePicker";
 
 const SHOPEE_URL = "https://shopee.sg/product/1885673461/47463818262/";
 
+const MAX_QTY_PER_BUNDLE = 20;
+
 const BUNDLES = [
-  { id: "single", label: "Single Sachet", price: "$3.90" },
-  { id: "pack-5", label: "Pack of 5", price: "$18.90" },
-  { id: "box-12", label: "Box of 12", price: "$44.90" },
+  { id: "single", label: "Single Sachet", price: 3.9, sachets: 1 },
+  { id: "pack-2", label: "Pack of 2", price: 7.5, sachets: 2 },
+  { id: "pack-5", label: "Pack of 5", price: 18.9, sachets: 5 },
+  { id: "box-12", label: "Box of 12", price: 44.9, sachets: 12 },
 ];
 
 export default function FulfillmentSelector({ onPickupCheckout }) {
   const [mode, setMode] = useState(null); // null | 'pickup' | 'delivery'
-  const [bundle, setBundle] = useState("pack-5");
+  const [quantities, setQuantities] = useState({ "pack-5": 1 });
   const [pickupDate, setPickupDate] = useState(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,14 +25,47 @@ export default function FulfillmentSelector({ onPickupCheckout }) {
     window.location.href = SHOPEE_URL;
   };
 
-  const canSubmit = pickupDate && name && email && phone && !submitting;
+  const setQty = (id, qty) => {
+    const clamped = Math.max(0, Math.min(MAX_QTY_PER_BUNDLE, qty));
+    setQuantities((prev) => ({ ...prev, [id]: clamped }));
+  };
+
+  const cart = useMemo(
+    () =>
+      BUNDLES.filter((b) => (quantities[b.id] || 0) > 0).map((b) => ({
+        bundle: b.id,
+        qty: quantities[b.id],
+      })),
+    [quantities]
+  );
+
+  const totalPrice = useMemo(
+    () =>
+      BUNDLES.reduce(
+        (sum, b) => sum + b.price * (quantities[b.id] || 0),
+        0
+      ),
+    [quantities]
+  );
+
+  const totalSachets = useMemo(
+    () =>
+      BUNDLES.reduce(
+        (sum, b) => sum + b.sachets * (quantities[b.id] || 0),
+        0
+      ),
+    [quantities]
+  );
+
+  const canSubmit =
+    cart.length > 0 && pickupDate && name && email && phone && !submitting;
 
   const handlePickupSubmit = async (e) => {
     e.preventDefault();
     if (!canSubmit) return;
     setSubmitting(true);
     try {
-      await onPickupCheckout({ bundle, pickupDate, name, email, phone });
+      await onPickupCheckout({ cart, pickupDate, name, email, phone });
     } finally {
       setSubmitting(false);
     }
@@ -64,20 +100,47 @@ export default function FulfillmentSelector({ onPickupCheckout }) {
 
       {mode === "pickup" && (
         <form className="pickup-panel" onSubmit={handlePickupSubmit}>
-          <div className="bundle-row" role="radiogroup" aria-label="Choose bundle size">
-            {BUNDLES.map((b) => (
-              <button
-                type="button"
-                key={b.id}
-                className={`bundle-option ${bundle === b.id ? "is-selected" : ""}`}
-                aria-pressed={bundle === b.id}
-                onClick={() => setBundle(b.id)}
-              >
-                <span className="bundle-label">{b.label}</span>
-                <span className="bundle-price">{b.price}</span>
-              </button>
-            ))}
+          <div className="bundle-list" role="group" aria-label="Choose bundles and quantities">
+            {BUNDLES.map((b) => {
+              const qty = quantities[b.id] || 0;
+              return (
+                <div className={`bundle-row-item ${qty > 0 ? "is-active" : ""}`} key={b.id}>
+                  <div className="bundle-row-info">
+                    <span className="bundle-row-label">{b.label}</span>
+                    <span className="bundle-row-price">${b.price.toFixed(2)}</span>
+                  </div>
+                  <div className="qty-stepper">
+                    <button
+                      type="button"
+                      className="qty-btn"
+                      onClick={() => setQty(b.id, qty - 1)}
+                      disabled={qty === 0}
+                      aria-label={`Decrease ${b.label} quantity`}
+                    >
+                      −
+                    </button>
+                    <span className="qty-value">{qty}</span>
+                    <button
+                      type="button"
+                      className="qty-btn"
+                      onClick={() => setQty(b.id, qty + 1)}
+                      disabled={qty >= MAX_QTY_PER_BUNDLE}
+                      aria-label={`Increase ${b.label} quantity`}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
           </div>
+
+          {cart.length > 0 && (
+            <div className="cart-total">
+              <span>Total ({totalSachets} sachet{totalSachets !== 1 ? "s" : ""})</span>
+              <span className="cart-total-price">${totalPrice.toFixed(2)}</span>
+            </div>
+          )}
 
           <PickupDatePicker value={pickupDate} onChange={setPickupDate} />
 

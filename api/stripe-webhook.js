@@ -23,12 +23,14 @@ function buffer(req) {
 
 const BUNDLE_QUANTITIES = {
   'single': 1,
+  'pack-2': 2,
   'pack-5': 5,
   'box-12': 12,
 }
 
 const BUNDLE_LABELS = {
   'single': 'Single Sachet',
+  'pack-2': 'Pack of 2',
   'pack-5': 'Pack of 5',
   'box-12': 'Box of 12',
 }
@@ -39,7 +41,7 @@ function formatPickupDate(isoDate) {
   return d.toLocaleDateString('en-SG', { weekday: 'long', day: 'numeric', month: 'long' })
 }
 
-function buildWhatsAppLink(phone, { name, bundle, formattedDate, location }) {
+function buildWhatsAppLink(phone, { name, itemsSummary, formattedDate, location }) {
   if (!phone) return null
   // Strip anything that isn't a digit (spaces, dashes, +, brackets)
   const digitsOnly = phone.replace(/\D/g, '')
@@ -47,9 +49,8 @@ function buildWhatsAppLink(phone, { name, bundle, formattedDate, location }) {
   const withCountryCode = digitsOnly.startsWith('65') ? digitsOnly : `65${digitsOnly}`
 
   const firstName = (name || '').split(' ')[0] || 'there'
-  const bundleLabel = BUNDLE_LABELS[bundle] || bundle
   const dateLine = formattedDate ? ` on ${formattedDate}` : ''
-  const message = `Hi ${firstName}, this is Damien, founder of ESPRESSGO! Thank you so much for your order (${bundleLabel}). Just a reminder that your pickup is at ${location}${dateLine}. Let me know if you have any questions!`
+  const message = `Hi ${firstName}, this is Damien, founder of ESPRESSGO! Thank you so much for your order (${itemsSummary}). Just a reminder that your pickup is at ${location}${dateLine}. Let me know if you have any questions!`
 
   return `https://wa.me/${withCountryCode}?text=${encodeURIComponent(message)}`
 }
@@ -72,20 +73,33 @@ export default async function handler(req, res) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object
-    const { bundle, name, phone, pickupDate, pickupLocation } = session.metadata
+    const { cart: cartJson, name, phone, pickupDate, pickupLocation } = session.metadata
     const email = session.customer_email
-    const sachetCount = BUNDLE_QUANTITIES[bundle] || 1
+    let cart = []
+    try {
+      cart = JSON.parse(cartJson || '[]')
+    } catch (err) {
+      console.error('Failed to parse cart metadata:', err.message)
+    }
+    const items = cart.map((c) => ({
+      bundle: c.bundle,
+      label: BUNDLE_LABELS[c.bundle] || c.bundle,
+      qty: c.qty,
+    }))
+    const sachetCount = items.reduce((sum, i) => sum + (BUNDLE_QUANTITIES[i.bundle] || 0) * i.qty, 0)
+    const itemsSummary = items.map((i) => `${i.label} x${i.qty}`).join(', ') || 'Order'
     const location = pickupLocation || 'NYP MakersNode Marketplace'
     const formattedDate = formatPickupDate(pickupDate)
-    const whatsappLink = buildWhatsAppLink(phone, { name, bundle, formattedDate, location })
+    const whatsappLink = buildWhatsAppLink(phone, { name, itemsSummary, formattedDate, location })
 
-    console.log('Attempting order insert:', { name, email, sachetCount, bundle, pickupDate })
+    console.log('Attempting order insert:', { name, email, sachetCount, items, pickupDate })
 
     const { data: orderData, error: orderError } = await supabase.from('orders').insert({
       name,
       email,
       phone,
       quantity: sachetCount,
+      items,
       status: 'paid',
       pickup_date: pickupDate || null,
       pickup_location: location,
@@ -120,7 +134,7 @@ export default async function handler(req, res) {
             <h2 style="color: #653a17;">Order Confirmed!</h2>
             <p>Hi ${name},</p>
             <p>Thanks for your order. Here are the details:</p>
-            <p><strong>${BUNDLE_LABELS[bundle] || bundle}</strong></p>
+            ${items.map((i) => `<p><strong>${i.label}</strong> x${i.qty}</p>`).join('')}
             <p>Pickup location: <strong>${location}</strong></p>
             ${formattedDate ? `<p>Pickup date: <strong>${formattedDate}</strong></p>` : ''}
             <p>We'll notify you once your order is ready for collection.</p>
@@ -136,11 +150,11 @@ export default async function handler(req, res) {
       await resend.emails.send({
         from: 'ESPRESSGO Orders <orders@espressgo.sg>',
         to: ['damienteo@espressgo.sg', 'espressgosg@gmail.com'],
-        subject: `New pickup order — ${BUNDLE_LABELS[bundle] || bundle} (${formattedDate || pickupDate || 'no date'})`,
+        subject: `New pickup order — ${itemsSummary} (${formattedDate || pickupDate || 'no date'})`,
         html: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
             <h2 style="color: #653a17;">New Pickup Order</h2>
-            <p><strong>Bundle:</strong> ${BUNDLE_LABELS[bundle] || bundle} (${sachetCount} sachets)</p>
+            <p><strong>Items:</strong> ${itemsSummary} (${sachetCount} sachets)</p>
             <p><strong>Customer:</strong> ${name}</p>
             <p><strong>Email:</strong> ${email}</p>
             <p><strong>Phone:</strong> ${phone}</p>

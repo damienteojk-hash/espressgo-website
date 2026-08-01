@@ -92,6 +92,9 @@
 
 .footer { background: var(--brown-dark); padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
 .footerText { font-size: 12px; color: var(--cream); opacity: 0.4; letter-spacing: 0.04em; }
+.footerLinks { display: flex; align-items: center; gap: 16px; }
+.footerLink { color: var(--cream); font-size: 11px; opacity: 0.5; letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s; }
+.footerLink:hover { opacity: 0.9; }
 .adminLink { background: none; color: var(--cream); font-size: 11px; opacity: 0.2; letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s; padding: 4px 8px; }
 .adminLink:hover { opacity: 0.5; }
 
