@@ -82,7 +82,12 @@ export default function Admin({ onBack }) {
   }
 
   async function markFulfilled(id) {
-    await supabase.from('orders').update({ status: 'fulfilled' }).eq('id', id)
+    const { error } = await supabase.from('orders').update({ status: 'fulfilled' }).eq('id', id)
+    if (error) {
+      console.error('Mark fulfilled failed:', error)
+      alert('Could not update order status: ' + error.message)
+      return
+    }
     setOrders(orders.map(o => o.id === id ? { ...o, status: 'fulfilled' } : o))
   }
 
