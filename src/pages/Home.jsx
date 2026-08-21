@@ -88,6 +88,21 @@ export default function Home({ onAdminNav }) {
         </div>
       </section>
 
+      <section className={styles.hook}>
+        <div className={styles.sectionInner}>
+          <h2 className={styles.hookQuestion}>Ever wanted a coffee but couldn't get one?</h2>
+          <p className={styles.hookPain}>You're mid-shift, no break in sight. This fits in your pocket.</p>
+          <div className={styles.stepsRow}>
+            <span className={styles.step}>Tear</span>
+            <span className={styles.stepArrow}>→</span>
+            <span className={styles.step}>Squeeze</span>
+            <span className={styles.stepArrow}>→</span>
+            <span className={styles.step}>Go</span>
+          </div>
+          <p className={styles.hookTagline}>Coffee. Anytime. Anywhere.</p>
+        </div>
+      </section>
+
       <section className={styles.product} id="product">
         <div className={styles.sectionInner}>
           <div className={styles.productGrid}>

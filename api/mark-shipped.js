@@ -40,7 +40,7 @@ export default async function handler(req, res) {
     try {
       await resend.emails.send({
         from: 'ESPRESSGO <orders@espressgo.sg>',
-        reply_to: 'damienteo@espressgo.sg',
+        reply_to: 'espressgo.support@gmail.com',
         to: order.email,
         subject: 'Your ESPRESSGO order is on its way!',
         html: `
@@ -54,6 +54,9 @@ export default async function handler(req, res) {
             <p><a href="${trackingUrl}" style="display:inline-block; background:#653a17; color:#fff; padding:10px 20px; border-radius:6px; text-decoration:none; font-weight:600;">Track your order</a></p>
             <p>Tracking number: ${trackingNumber}</p>
             <p>Thanks for supporting ESPRESSGO!</p>
+            <p style="font-size: 13px; color: #888; margin-top: 24px; padding-top: 16px; border-top: 1px solid #eee;">
+              Questions about your order? Email us at <a href="mailto:espressgo.support@gmail.com" style="color: #653a17;">espressgo.support@gmail.com</a>.
+            </p>
           </div>
         `,
       })

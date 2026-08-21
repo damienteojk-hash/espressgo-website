@@ -39,6 +39,14 @@
 .sectionTitle { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 48px; line-height: 1.05; color: var(--brown); margin-bottom: 32px; max-width: 600px; }
 .body { font-size: 16px; line-height: 1.7; color: var(--text-dark); opacity: 0.85; margin-bottom: 24px; }
 
+.hook { background: var(--cream); text-align: center; }
+.hookQuestion { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 36px; line-height: 1.1; color: var(--brown); max-width: 640px; margin: 0 auto 16px; }
+.hookPain { font-size: 16px; line-height: 1.6; color: var(--text-dark); opacity: 0.75; max-width: 480px; margin: 0 auto 32px; }
+.stepsRow { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+.step { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 28px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--brown); }
+.stepArrow { font-size: 20px; color: var(--brown); opacity: 0.4; }
+.hookTagline { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--brown); opacity: 0.6; }
+
 .product { background: var(--cream-light); }
 .productGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
 .packagingCol { display: flex; flex-direction: column; gap: 24px; }
@@ -112,6 +120,8 @@
   .heroFooter { padding: 12px 24px; flex-wrap: wrap; gap: 8px; }
   .sectionInner { padding: 56px 24px; }
   .sectionTitle, .sectionTitleLight { font-size: 32px; }
+  .hookQuestion { font-size: 28px; }
+  .step { font-size: 22px; }
   .productGrid, .aboutGrid { grid-template-columns: 1fr; gap: 40px; }
   .orderCard { grid-template-columns: 1fr; }
   .orderInfo { display: none; }

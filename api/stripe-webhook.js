@@ -216,7 +216,7 @@ async function handleDeliveryOrder(session) {
   try {
     await resend.emails.send({
       from: 'ESPRESSGO <orders@espressgo.sg>',
-      reply_to: 'damienteo@espressgo.sg',
+      reply_to: 'espressgo.support@gmail.com',
       to: email,
       subject: 'Your ESPRESSGO delivery order is confirmed',
       html: `
@@ -229,6 +229,9 @@ async function handleDeliveryOrder(session) {
           <p>Estimated delivery: <strong>${estimatedWindow}</strong></p>
           <p>We'll email you a tracking link as soon as your order ships (usually within 1-2 business days).</p>
           <p>Thanks for supporting ESPRESSGO!</p>
+          <p style="font-size: 13px; color: #888; margin-top: 24px; padding-top: 16px; border-top: 1px solid #eee;">
+            Questions about your order? Email us at <a href="mailto:espressgo.support@gmail.com" style="color: #653a17;">espressgo.support@gmail.com</a>.
+          </p>
         </div>
       `,
     })
