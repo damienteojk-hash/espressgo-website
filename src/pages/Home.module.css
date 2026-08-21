@@ -21,6 +21,7 @@
 .dot { opacity: 0.4; }
 
 .ctaBlock { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+.heroCtaRow { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
 .badge { background: var(--cream); color: var(--brown); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 12px; border-radius: 2px; }
 .badgeSoldOut { background: transparent; color: var(--cream); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; padding: 4px 12px; border: 1px solid var(--cream-muted); border-radius: 2px; opacity: 0.7; }
 .ctaNote { color: var(--cream); font-size: 14px; opacity: 0.8; }
@@ -41,7 +42,6 @@
 .product { background: var(--cream-light); }
 .productGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
 .packagingCol { display: flex; flex-direction: column; gap: 24px; }
-.packagingImg { width: 100%; max-width: 260px; margin: 0 auto; display: block; }
 .pillRow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .pill { background: var(--cream); color: var(--brown); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--cream-muted); }
 
@@ -58,6 +58,11 @@
 .sectionTitleLight { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 48px; line-height: 1.05; color: var(--cream); margin-bottom: 40px; max-width: 600px; }
 .aboutGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
 .bodyLight { font-size: 16px; line-height: 1.7; color: var(--cream); opacity: 0.8; }
+
+.awards { background: var(--cream-light); }
+.awardsRow { display: flex; gap: 32px; flex-wrap: wrap; }
+.awardCard { width: 220px; border-radius: 8px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,0.14); }
+.awardCard img { width: 100%; display: block; }
 
 .orderSection { background: var(--cream); }
 .orderCard { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: center; background: var(--brown); border-radius: 4px; padding: 48px; margin-top: 32px; }

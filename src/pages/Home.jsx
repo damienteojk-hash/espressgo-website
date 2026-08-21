@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { supabase } from '../supabase'
 import styles from './Home.module.css'
-import FulfillmentSelector from '../components/FulfillmentSelector'
-import '../components/fulfillment.css'
+import ProductCarousel from '../components/ProductCarousel'
+import DeliveryOrderForm from '../components/DeliveryOrderForm'
 
 const CharacterSVG = ({ cls }) => (
   <img src="/Asset_1.svg" alt="" className={cls || styles.character} />
@@ -28,13 +28,12 @@ export default function Home({ onAdminNav }) {
     setLoading(false)
   }
 
-  // Called when the buyer fills the pickup form and hits "Continue to payment".
-  // Sends the data straight to your real /api/create-checkout endpoint.
-  async function handlePickupCheckout({ cart, pickupDate, name, email, phone }) {
-    const res = await fetch('/api/create-checkout', {
+  // Called when the buyer fills the delivery form and hits "Continue to payment".
+  async function handleDeliveryCheckout({ cart, name, email, phone, addressLine, postalCode }) {
+    const res = await fetch('/api/create-delivery-checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cart, pickupDate, name, email, phone }),
+      body: JSON.stringify({ cart, name, email, phone, addressLine, postalCode }),
     })
     const data = await res.json()
     if (!res.ok) {
@@ -47,18 +46,11 @@ export default function Home({ onAdminNav }) {
   const HeroCTA = () => (
     <div className={styles.ctaBlock}>
       <span className={styles.badge}>Available Now on Shopee</span>
-      <p className={styles.ctaNoteDark}>Grab your sachets, delivered straight to your door — or pick up free nearby.</p>
-      <div className="hero-cta-row">
+      <p className={styles.ctaNoteDark}>Grab your sachets, delivered straight to your door.</p>
+      <div className={styles.heroCtaRow}>
         <a href={SHOPEE_URL} target="_blank" rel="noopener noreferrer" className={styles.ctaBtn}>
           Buy on Shopee
         </a>
-        <button
-          type="button"
-          className="hero-pickup-btn"
-          onClick={() => document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          Order for Pickup
-        </button>
       </div>
     </div>
   )
@@ -70,6 +62,7 @@ export default function Home({ onAdminNav }) {
         <div className={styles.navLinks}>
           <a href="#product">Product</a>
           <a href="#about">About</a>
+          <a href="#awards">Awards</a>
           <a href="#order">Order</a>
           <a href="/ig" target="_blank" rel="noopener noreferrer">Instagram</a>
         </div>
@@ -110,7 +103,7 @@ export default function Home({ onAdminNav }) {
               </div>
             </div>
             <div className={styles.packagingCol}>
-              <img src="/ESPRESSGO Packaging.svg" alt="ESPRESSGO Packaging" className={styles.packagingImg} />
+              <ProductCarousel />
               <div className={styles.nutritionCard}>
                 <p className={styles.nipLabel}>Nutrition Information</p>
                 <p className={styles.nipServing}>Per sachet (approximately 50g)</p>
@@ -138,12 +131,28 @@ export default function Home({ onAdminNav }) {
         </div>
       </section>
 
+      <section className={styles.awards} id="awards">
+        <div className={styles.sectionInner}>
+          <p className={styles.sectionLabel}>Recognition</p>
+          <h2 className={styles.sectionTitle}>2026 World Food Innovation Awards Finalist</h2>
+          <div className={styles.awardsRow}>
+            <div className={styles.awardCard}>
+              <img src="/awards/wfia-drink-innovation.webp" alt="World Food Innovation Awards 2026 Finalist — Drink Innovation" />
+            </div>
+            <div className={styles.awardCard}>
+              <img src="/awards/wfia-health-innovation.webp" alt="World Food Innovation Awards 2026 Finalist — Health Innovation" />
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className={styles.orderSection} id="order">
         <div className={styles.sectionInner}>
           <p className={styles.sectionLabel}>Get Yours</p>
           <h2 className={styles.sectionTitle}>Order ESPRESSGO</h2>
           <div className={styles.soldOutBlock}>
-            <FulfillmentSelector onPickupCheckout={handlePickupCheckout} />
+            <DeliveryOrderForm onDeliveryCheckout={handleDeliveryCheckout} />
+            <p className={styles.ctaNoteDark}>Also available in person at NYP MakersNode Marketplace.</p>
 
             {submitted ? (
               <p className={styles.ctaNote}>You're on the list. We'll keep you posted.</p>

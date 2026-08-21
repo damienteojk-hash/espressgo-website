@@ -45,4 +45,9 @@
 .statusFulfilled { background: #d1e7dd; color: #0a3622; }
 .fulfillBtn { background: none; color: var(--brown); font-size: 12px; font-weight: 600; text-decoration: underline; opacity: 0.7; transition: opacity 0.2s; }
 .fulfillBtn:hover { opacity: 1; }
+.fulfillBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .emptyState { color: var(--text-dark); opacity: 0.4; font-size: 14px; padding: 24px 0; }
+
+.trackingForm { display: flex; flex-direction: column; gap: 6px; min-width: 200px; }
+.trackingForm .settingInput { width: 100%; font-size: 13px; padding: 8px 10px; }
+.trackingError { color: #e05252; font-size: 12px; }
