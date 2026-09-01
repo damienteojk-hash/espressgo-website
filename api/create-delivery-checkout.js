@@ -3,13 +3,11 @@ import Stripe from 'stripe'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 const PRICES = {
-  'single': { amount: 390, name: 'Single Sachet' },
-  'pack-2': { amount: 750, name: 'Pack of 2' },
   'pack-5': { amount: 1890, name: 'Pack of 5' },
   'box-12': { amount: 4490, name: 'Box of 12' },
 }
 
-const DELIVERY_FEE_AMOUNT = 490 // SGD 4.90, in cents
+const DELIVERY_FEE_AMOUNT = 390 // SGD 3.90, in cents
 const MAX_QTY_PER_ITEM = 20
 
 export default async function handler(req, res) {

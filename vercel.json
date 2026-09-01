@@ -1,7 +1,10 @@
 {
   "redirects": [
     { "source": "/ig", "destination": "https://instagram.com/espressgo.sg", "permanent": false },
-    { "source": "/whatsapp", "destination": "https://wa.me/6587977961", "permanent": false }
+    { "source": "/whatsapp", "destination": "https://wa.me/6587977961", "permanent": false },
+    { "source": "/tiktok", "destination": "https://www.tiktok.com/@espressgosg?is_from_webapp=1&sender_device=pc", "permanent": false },
+    { "source": "/linkedin", "destination": "https://www.linkedin.com/in/damien-teo-371b31257", "permanent": false },
+    { "source": "/shopee", "destination": "https://shopee.sg/product/1885673461/47463818262/", "permanent": false }
   ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }

@@ -9,6 +9,19 @@
 .navLinks { display: flex; gap: 32px; }
 .navLinks a { color: var(--cream); font-family: 'Barlow', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; transition: opacity 0.2s; }
 .navLinks a:hover { opacity: 1; }
+.navLinks a.navBuyNow { background: var(--cream); color: var(--brown); opacity: 1; padding: 8px 18px; border-radius: 100px; transition: background 0.2s; }
+.navLinks a.navBuyNow:hover { background: var(--cream-muted); }
+
+.footerFollowUs { display: flex; align-items: center; gap: 12px; color: var(--cream); font-size: 11px; opacity: 0.6; letter-spacing: 0.1em; text-transform: uppercase; }
+.footerFollowUs a { color: var(--cream); display: flex; transition: opacity 0.2s; opacity: 0.9; }
+.footerFollowUs a:hover { opacity: 1; }
+.socialIcon { width: 20px; height: 20px; }
+.btnIcon { width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; }
+
+.heroFollowUs { display: flex; align-items: center; gap: 16px; color: var(--cream); font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; opacity: 0.85; margin-top: 8px; }
+.heroFollowUs a { color: var(--cream); display: flex; transition: opacity 0.2s, transform 0.15s; opacity: 0.95; }
+.heroFollowUs a:hover { opacity: 1; transform: translateY(-1px); }
+.heroSocialIcon { width: 26px; height: 26px; }
 
 .hero { background: var(--brown); min-height: 100vh; padding-top: 72px; display: flex; flex-direction: column; }
 .heroContent { display: flex; align-items: center; justify-content: space-between; padding: 64px 48px 32px; gap: 32px; flex: 1; }
@@ -53,19 +66,38 @@
 .pillRow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .pill { background: var(--cream); color: var(--brown); font-size: 12px; font-weight: 600; letter-spacing: 0.06em; padding: 6px 14px; border-radius: 100px; border: 1px solid var(--cream-muted); }
 
-.nutritionCard { background: var(--brown); color: var(--cream); padding: 32px; border-radius: 4px; }
-.nipLabel { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.05em; margin-bottom: 4px; }
-.nipServing { font-size: 12px; opacity: 0.6; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(243,231,208,0.2); }
-.nipRow { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; border-bottom: 1px solid rgba(243,231,208,0.1); }
-.nipIndent { padding-left: 16px; opacity: 0.7; }
-.nipHighlight { font-weight: 700; border-bottom: none; margin-top: 4px; }
-.nipNote { font-size: 11px; opacity: 0.5; margin-top: 16px; font-style: italic; }
+.benefitsCard { background: var(--brown); color: var(--cream); padding: 32px; border-radius: 4px; }
+.nipLabel { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: 0.05em; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(243,231,208,0.2); }
+.benefitItem { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid rgba(243,231,208,0.1); }
+.benefitItem:last-child { border-bottom: none; padding-bottom: 0; }
+.benefitIcon { width: 28px; height: 28px; flex-shrink: 0; opacity: 0.9; margin-top: 2px; }
+.benefitTitle { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.02em; margin-bottom: 4px; }
+.benefitDesc { font-size: 13px; opacity: 0.7; line-height: 1.5; }
 
 .about { background: var(--brown); }
 .sectionLabelLight { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream); opacity: 0.5; margin-bottom: 12px; }
 .sectionTitleLight { font-family: 'Barlow Condensed', sans-serif; font-weight: 900; font-size: 48px; line-height: 1.05; color: var(--cream); margin-bottom: 40px; max-width: 600px; }
 .aboutGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
 .bodyLight { font-size: 16px; line-height: 1.7; color: var(--cream); opacity: 0.8; }
+
+.founder { background: var(--cream-light); }
+.founderGrid { display: grid; grid-template-columns: 280px 1fr; gap: 48px; align-items: center; }
+.founderPhoto { width: 100%; border-radius: 8px; box-shadow: 0 12px 32px rgba(0,0,0,0.16); }
+.founderLinks { display: flex; gap: 12px; flex-wrap: wrap; }
+.founderLinkBtn { display: inline-flex; align-items: center; background: var(--brown); color: var(--cream); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 24px; border-radius: 2px; transition: background 0.2s, transform 0.15s; }
+.founderLinkBtn:hover { background: var(--brown-light); transform: translateY(-1px); }
+
+.wholesale { background: var(--brown-dark); }
+.wholesale .sectionLabel { color: var(--cream); opacity: 0.5; }
+.wholesale .sectionTitle { color: var(--cream); }
+.wholesale .body { color: var(--cream); opacity: 0.8; }
+
+.availability { background: var(--cream); }
+.availabilityGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.availabilityColLabel { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brown); opacity: 0.5; margin-bottom: 12px; }
+.availabilityRow { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--cream-muted); font-size: 15px; color: var(--brown); }
+.availabilityRow a { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--brown); opacity: 0.7; transition: opacity 0.2s; }
+.availabilityRow a:hover { opacity: 1; }
 
 .awards { background: var(--cream-light); }
 .awardsRow { display: flex; gap: 32px; flex-wrap: wrap; }
@@ -122,7 +154,8 @@
   .sectionTitle, .sectionTitleLight { font-size: 32px; }
   .hookQuestion { font-size: 28px; }
   .step { font-size: 22px; }
-  .productGrid, .aboutGrid { grid-template-columns: 1fr; gap: 40px; }
+  .productGrid, .aboutGrid, .founderGrid, .availabilityGrid { grid-template-columns: 1fr; gap: 40px; }
+  .founderPhoto { max-width: 240px; }
   .orderCard { grid-template-columns: 1fr; }
   .orderInfo { display: none; }
   .footer { flex-direction: column; align-items: flex-start; padding: 32px 24px; }
