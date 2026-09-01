@@ -92,7 +92,7 @@
 .wholesale .sectionTitle { color: var(--cream); }
 .wholesale .body { color: var(--cream); opacity: 0.8; }
 
-.availability { background: var(--cream); }
+.availability { background: var(--cream-light); }
 .availabilityGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
 .availabilityColLabel { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brown); opacity: 0.5; margin-bottom: 12px; }
 .availabilityRow { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--cream-muted); font-size: 15px; color: var(--brown); }

@@ -251,6 +251,25 @@ export default function Home({ onAdminNav }) {
         </div>
       </section>
 
+      <section className={styles.orderSection} id="order">
+        <div className={styles.sectionInner}>
+          <p className={styles.sectionLabel}>Get Yours</p>
+          <h2 className={styles.sectionTitle}>Order ESPRESSGO</h2>
+          <div className={styles.soldOutBlock}>
+            <DeliveryOrderForm onDeliveryCheckout={handleDeliveryCheckout} />
+
+            {submitted ? (
+              <p className={styles.ctaNote}>You're on the list. We'll keep you posted.</p>
+            ) : (
+              <form onSubmit={handleNotify} className={styles.notifyForm}>
+                <input type="email" placeholder="your@email.com" value={email} onChange={e => setEmail(e.target.value)} className={styles.notifyInputDark} required />
+                <button type="submit" className={styles.notifyBtnDark} disabled={loading}>{loading ? '...' : 'Get Updates'}</button>
+              </form>
+            )}
+          </div>
+        </div>
+      </section>
+
       <section className={styles.availability}>
         <div className={styles.sectionInner}>
           <p className={styles.sectionLabel}>Where To Find Us</p>
@@ -276,25 +295,6 @@ export default function Home({ onAdminNav }) {
                 <a href="/tiktok" target="_blank" rel="noopener noreferrer">Visit Page</a>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className={styles.orderSection} id="order">
-        <div className={styles.sectionInner}>
-          <p className={styles.sectionLabel}>Get Yours</p>
-          <h2 className={styles.sectionTitle}>Order ESPRESSGO</h2>
-          <div className={styles.soldOutBlock}>
-            <DeliveryOrderForm onDeliveryCheckout={handleDeliveryCheckout} />
-
-            {submitted ? (
-              <p className={styles.ctaNote}>You're on the list. We'll keep you posted.</p>
-            ) : (
-              <form onSubmit={handleNotify} className={styles.notifyForm}>
-                <input type="email" placeholder="your@email.com" value={email} onChange={e => setEmail(e.target.value)} className={styles.notifyInputDark} required />
-                <button type="submit" className={styles.notifyBtnDark} disabled={loading}>{loading ? '...' : 'Get Updates'}</button>
-              </form>
-            )}
           </div>
         </div>
       </section>
