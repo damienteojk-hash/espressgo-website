@@ -1,4 +1,4 @@
-.page { min-height: 100vh; background: var(--cream-light); }
+.page { min-height: 100vh; background: var(--cream-light); overflow-x: hidden; }
 
 .navWordmark { height: 22px; width: auto; }
 .heroWordmark { width: 100%; max-width: 480px; height: auto; }
@@ -129,7 +129,7 @@
 .ctaBtnDark { display: inline-block; background: var(--brown); color: var(--cream); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 36px; border-radius: 2px; transition: background 0.2s, transform 0.15s; border: none; cursor: pointer; }
 .ctaBtnDark:hover { background: var(--brown-light); transform: translateY(-1px); }
 .notifyFormDark { display: flex; }
-.notifyInputDark { background: var(--white); border: 1px solid var(--cream-muted); border-right: none; color: var(--brown); font-family: 'Barlow', sans-serif; font-size: 14px; padding: 12px 16px; outline: none; width: 220px; }
+.notifyInputDark { background: var(--white); border: 1px solid var(--cream-muted); border-right: none; color: var(--brown); font-family: 'Barlow', sans-serif; font-size: 16px; padding: 12px 16px; outline: none; width: 220px; }
 .notifyInputDark::placeholder { color: var(--brown); opacity: 0.4; }
 .notifyBtnDark { background: var(--brown); color: var(--cream); font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; padding: 12px 20px; transition: background 0.2s; }
 .notifyBtnDark:hover { background: var(--brown-light); }
@@ -161,4 +161,14 @@
   .footer { flex-direction: column; align-items: flex-start; padding: 32px 24px; }
   .bundleGrid { grid-template-columns: 1fr 1fr; }
   .checkoutFormGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .nav { padding: 12px 16px; }
+  .navWordmark { height: 17px; }
+  .navLinks { gap: 10px; }
+  .navLinks a:not(.navBuyNow) { display: none; }
+  .navLinks a.navBuyNow { padding: 7px 14px; font-size: 13px; }
+  .heroWordmark { max-width: 300px; }
+  .availabilityRow a { padding: 10px 0; margin: -10px 0; }
 }

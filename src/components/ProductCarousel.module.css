@@ -41,7 +41,7 @@
 
 .dots { display: flex; gap: 8px; }
 
-.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cream-muted); border: none; cursor: pointer; padding: 0; transition: background 0.2s, transform 0.2s; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cream-muted); background-clip: content-box; border: none; cursor: pointer; padding: 8px; transition: background 0.2s, transform 0.2s; }
 
 .dotActive { background: var(--brown); transform: scale(1.2); }
 

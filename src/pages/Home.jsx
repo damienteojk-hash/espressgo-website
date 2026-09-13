@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { supabase } from '../supabase'
 import styles from './Home.module.css'
 import ProductCarousel from '../components/ProductCarousel'
-import DeliveryOrderForm from '../components/DeliveryOrderForm'
 
 const CharacterSVG = ({ cls }) => (
   <img src="/Asset_1.svg" alt="" className={cls || styles.character} />
@@ -83,33 +82,14 @@ export default function Home({ onAdminNav }) {
     setLoading(false)
   }
 
-  // Called when the buyer fills the delivery form and hits "Continue to payment".
-  async function handleDeliveryCheckout({ cart, name, email, phone, addressLine, postalCode }) {
-    const res = await fetch('/api/create-delivery-checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ cart, name, email, phone, addressLine, postalCode }),
-    })
-    const data = await res.json()
-    if (!res.ok) {
-      alert(data.error || 'Something went wrong, please try again.')
-      return
-    }
-    window.location.href = data.url
-  }
-
   const HeroCTA = () => (
     <div className={styles.ctaBlock}>
       <span className={styles.badge}>In Stock Now</span>
-      <p className={styles.ctaNoteDark}>Delivered straight to your door, anywhere in Singapore.</p>
+      <p className={styles.ctaNoteDark}>Available on Shopee — delivered island-wide.</p>
       <div className={styles.heroCtaRow}>
-        <button
-          type="button"
-          className={styles.ctaBtn}
-          onClick={() => document.getElementById('order')?.scrollIntoView({ behavior: 'smooth' })}
-        >
-          Order Now
-        </button>
+        <a href="/shopee" target="_blank" rel="noopener noreferrer" className={styles.ctaBtn}>
+          Buy on Shopee
+        </a>
       </div>
       <FollowUs className={styles.heroFollowUs} iconClassName={styles.heroSocialIcon} />
     </div>
@@ -122,7 +102,7 @@ export default function Home({ onAdminNav }) {
         <div className={styles.navLinks}>
           <a href="#product">Product</a>
           <a href="#about">About</a>
-          <a href="#order" className={styles.navBuyNow}>Buy Now</a>
+          <a href="/shopee" target="_blank" rel="noopener noreferrer" className={styles.navBuyNow}>Buy Now</a>
         </div>
       </nav>
 
@@ -254,9 +234,11 @@ export default function Home({ onAdminNav }) {
       <section className={styles.orderSection} id="order">
         <div className={styles.sectionInner}>
           <p className={styles.sectionLabel}>Get Yours</p>
-          <h2 className={styles.sectionTitle}>Order ESPRESSGO</h2>
+          <h2 className={styles.sectionTitle}>Buy ESPRESSGO on Shopee</h2>
           <div className={styles.soldOutBlock}>
-            <DeliveryOrderForm onDeliveryCheckout={handleDeliveryCheckout} />
+            <a href="/shopee" target="_blank" rel="noopener noreferrer" className={styles.ctaBtnDark}>
+              Buy on Shopee
+            </a>
 
             {submitted ? (
               <p className={styles.ctaNote}>You're on the list. We'll keep you posted.</p>
