@@ -26,6 +26,7 @@ const BUNDLE_QUANTITIES = {
   'pack-2': 2,
   'pack-5': 5,
   'box-12': 12,
+  'box-40': 40,
 }
 
 const BUNDLE_LABELS = {
@@ -33,6 +34,7 @@ const BUNDLE_LABELS = {
   'pack-2': 'Pack of 2',
   'pack-5': 'Pack of 5',
   'box-12': 'Box of 12',
+  'box-40': 'Box of 40',
 }
 
 function formatPickupDate(isoDate) {

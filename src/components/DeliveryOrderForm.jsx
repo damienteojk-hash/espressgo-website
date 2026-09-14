@@ -2,11 +2,12 @@ import { useMemo, useState } from "react";
 import styles from "./DeliveryOrderForm.module.css";
 
 const MAX_QTY_PER_BUNDLE = 20;
-const DELIVERY_FEE = 3.9;
+const DELIVERY_FEE = 2.5;
 
 const BUNDLES = [
   { id: "pack-5", label: "Pack of 5", price: 18.9, sachets: 5 },
   { id: "box-12", label: "Box of 12", price: 44.9, sachets: 12 },
+  { id: "box-40", label: "Box of 40", price: 144.9, sachets: 40 },
 ];
 
 const POSTAL_CODE_RE = /^\d{6}$/;
@@ -101,7 +102,7 @@ export default function DeliveryOrderForm({ onDeliveryCheckout }) {
       {cart.length > 0 && (
         <div className={styles.totals}>
           <div className={styles.totalsRow}><span>Subtotal</span><span>${subtotal.toFixed(2)}</span></div>
-          <div className={styles.totalsRow}><span>Delivery</span><span>${DELIVERY_FEE.toFixed(2)}</span></div>
+          <div className={styles.totalsRow}><span>Shipping</span><span>${DELIVERY_FEE.toFixed(2)}</span></div>
           <div className={`${styles.totalsRow} ${styles.totalsRowFinal}`}><span>Total</span><span>${total.toFixed(2)}</span></div>
         </div>
       )}

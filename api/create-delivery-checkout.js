@@ -5,9 +5,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 const PRICES = {
   'pack-5': { amount: 1890, name: 'Pack of 5' },
   'box-12': { amount: 4490, name: 'Box of 12' },
+  'box-40': { amount: 14490, name: 'Box of 40' },
 }
 
-const DELIVERY_FEE_AMOUNT = 390 // SGD 3.90, in cents
+const DELIVERY_FEE_AMOUNT = 250 // SGD 2.50, in cents
 const MAX_QTY_PER_ITEM = 20
 
 export default async function handler(req, res) {
@@ -54,7 +55,7 @@ export default async function handler(req, res) {
     line_items.push({
       price_data: {
         currency: 'sgd',
-        product_data: { name: 'Delivery Fee' },
+        product_data: { name: 'Shipping' },
         unit_amount: DELIVERY_FEE_AMOUNT,
       },
       quantity: 1,
